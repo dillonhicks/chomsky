@@ -1,0 +1,46 @@
+#!/usr/bin/env python
+import sys
+from pprint import pprint
+from datetime import datetime
+
+from chomsky import conf
+from chomsky import db
+from chomsky.db import Article
+
+from chomsky import fetch
+from chomsky.parsers import cnn
+from chomsky import histos
+
+
+def sink(generator):
+    # Just cause the generator to sink the pipeline.
+    for thing in generator: pass
+
+if __name__ == '__main__':
+    if not len(sys.argv) > 1:
+        print >> sys.stderr, 'Error: No source(s) specified.'
+        raise SystemExit(1)
+    
+    sites = [site.lower() for site in sys.argv[1:]]
+    run_conf = {}
+    for site in sites:
+        if not site in conf.sites.keys():
+            print >> sys.stderr, 'Error: \'' + site + '\' is not a ' \
+                'supported site.'
+            print >> sys.stderr, 'Try one (or more) of the following: ' \
+                + ', '.join(conf.sites.keys())
+            raise SystemExit(2)
+        else:
+            run_conf[site] = conf.sites[site]
+        
+    
+    rss_urls = fetch.make_rss_urls(run_conf)
+    article_urls = fetch.make_article_urls(rss_urls)
+    articles = fetch.fetch_html(article_urls)
+    filepaths = fetch.save_articles(articles)
+    filepaths = fetch.tar_saved_files(filepaths)
+    sink(filepaths)
+
+    # parsed_articles = cnn.parse_articles(filepaths)
+    # dumped_articles = db.dump(parsed_articles)    
+    # sink(dumped_articles)

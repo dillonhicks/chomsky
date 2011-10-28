@@ -1,0 +1,7 @@
+*~
+*.pyc
+*.txt
+*.html
+*.tar.bz2
+*.tar
+*.db-journal
