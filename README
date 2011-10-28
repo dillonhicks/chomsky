@@ -1,2 +1,11 @@
-I am the Walrus. 
-You are the Egg Man.
+README
+======
+
+While chomsky is still largely underdevelopment, its purpose is to provide a way by 
+which data processing could be done on political data (articles, opinions, 
+speeches, etc.) to see how current events changed the political rhetoric.
+
+This project I started at the begining of the current political 
+campaign cycle that would aggregate news articles from certain websites, parse them for 
+content and then do simple natural language tool kit analysis on their composition.
+
